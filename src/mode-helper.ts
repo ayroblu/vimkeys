@@ -1,6 +1,7 @@
 import { Keymap, Mode } from "./types";
 
-export function modeHelper() {
+export const mode = modeHelper();
+function modeHelper() {
   let mode: Mode = "insert";
   // There's two ways to think about state. Imagine 'party' and 'arts'. If you
   // type in `parts` what should happen? Either simply clear / single ref

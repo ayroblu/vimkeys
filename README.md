@@ -17,4 +17,6 @@ TODO
 
 Reference
 ---------
-https://www.bedelstein.com/post/building-a-safari-app-extension-in-ios-15
+
+- https://www.bedelstein.com/post/building-a-safari-app-extension-in-ios-15
+- https://developer.apple.com/videos/play/wwdc2021/10104/

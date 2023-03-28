@@ -29,7 +29,7 @@ build: DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentine
 
 # ------------------
 
-dist/content.js: src/content.ts
+dist/content.js: $(shell rg --files src)
 > npx esbuild ./src/content.js --bundle --outfile="$@"
 > cp "$@" "Shared (Extension)/Resources/content.js"
 
