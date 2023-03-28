@@ -34,5 +34,5 @@ dist/content.js: src/content.ts
 > cp "$@" "Shared (Extension)/Resources/content.js"
 
 DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentinel: $(shell rg --files 'Shared (App)' 'Shared (Extension)' 'iOS (App)' 'iOS (Extension)' 'macOS (App)' 'macOS (Extension)' '${AppName}.xcodeproj' | sed 's: :\\ :g') dist/content.js
-> xcodebuild -scheme ${AppTargetName} -target ${AppTargetName} -configuration ${Configuration} -destination arch=arm64 build || xcodebuild -scheme ${AppTargetName} -target ${AppTargetName} -configuration ${Configuration} -destination arch=arm64 clean build
+> xcodebuild -scheme ${AppTargetName} -target ${AppTargetName} -configuration ${Configuration} -destination arch=arm64 build
 > touch "$@"

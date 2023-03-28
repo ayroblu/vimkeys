@@ -6,8 +6,15 @@ This is a safari extension in the spirit of vimium-c
 TODO
 ----
 
-1. Create a build system for TypeScript -> content.js
-2. Build configuration panel
-3. Build core features
-4. Build system so that I can update it continuously
+1. Build configuration panel
+2. Build core features
+  - Bookmarks list
+  - open links with labels
+    - https://gist.github.com/iiLaurens/81b1b47f6259485c93ce6f0cdd17490a
+  - focus text inputs
+  - edit url
+  - keymap (question mark)
 
+Reference
+---------
+https://www.bedelstein.com/post/building-a-safari-app-extension-in-ios-15
