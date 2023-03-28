@@ -31,22 +31,31 @@ addEventListener(
 
       return;
     }
-    if (event.key === "j") {
+    const key = getKey(event);
+    const mappedFunc = keymaps[key];
+    if (mappedFunc) {
       event.preventDefault();
-      scrollBy(0, 50);
-    } else if (event.key === "k") {
-      event.preventDefault();
-      scrollBy(0, -50);
-    } else if (event.key === "d") {
-      event.preventDefault();
-      scrollBy(0, window.innerHeight / 2);
-    } else if (event.key === "u") {
-      event.preventDefault();
-      scrollBy(0, -window.innerHeight / 2);
-    } else if (event.key === "'") {
-      event.preventDefault();
-      isActive = false;
+      mappedFunc();
     }
   },
   true
 );
+function getKey(event: KeyboardEvent) {
+  return (
+    [
+      event.ctrlKey ? "C-" : null,
+      event.metaKey ? "M-" : null,
+      event.altKey ? "A-" : null,
+      event.shiftKey ? "S-" : null,
+    ]
+      .filter(Boolean)
+      .join("") + event.key
+  );
+}
+const keymaps: Record<string, () => void> = {
+  j: () => scrollBy(0, 50),
+  k: () => scrollBy(0, -50),
+  d: () => scrollBy(0, window.innerHeight / 2),
+  u: () => scrollBy(0, -window.innerHeight / 2),
+  "'": () => (isActive = false),
+};

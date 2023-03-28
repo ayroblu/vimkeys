@@ -21,6 +21,9 @@ AppTargetName := 'vimkeys (macOS)'
 Configuration := Debug
 
 # Default - top level rule is what gets ran when you run just `make`
+js: dist/content.js
+.PHONY: js
+
 build: DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentinel
 .PHONY: build
 
