@@ -84,7 +84,6 @@ const insertInputKeymaps: Keymap = {
 const linksKeymaps: Keymap = {
   other: handlers.clearLinksAndNormal,
 };
-console.log("linksKeymaps", linksKeymaps);
 const alpha = [
   ...Array.from(Array(10)).map((_, i) => i + 48),
   ...Array.from(Array(26)).map((_, i) => i + 65),
