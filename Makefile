@@ -21,19 +21,10 @@ AppTargetName := 'vimkeys (macOS)'
 Configuration := Debug
 
 # Default - top level rule is what gets ran when you run just `make`
-# build-quick: DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}\ Extension.appex/Contents/Resources/content.js DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.app/Contents/PlugIns/${AppName}\ Extension.appex/Contents/Resources/content.js
-# .PHONY: build-quick
-
 build: DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentinel
-#> open -a Safari DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}\ Extension.appex
 .PHONY: build
 
 # ------------------
-# DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}\ Extension.appex/Contents/Resources/content.js: dist/content.js
-# > cp dist/content.js "$@"
-
-# DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.app/Contents/PlugIns/${AppName}\ Extension.appex/Contents/Resources/content.js: dist/content.js
-# > cp dist/content.js "$@"
 
 dist/content.js: src/content.ts
 > npx tsc
