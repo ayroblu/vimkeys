@@ -30,7 +30,7 @@ build: DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentine
 # ------------------
 
 dist/content.js: src/content.ts
-> npx tsc
+> npx esbuild ./src/content.js --bundle --outfile="$@"
 > cp "$@" "Shared (Extension)/Resources/content.js"
 
 DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentinel: $(shell rg --files 'Shared (App)' 'Shared (Extension)' 'iOS (App)' 'iOS (Extension)' 'macOS (App)' 'macOS (Extension)' '${AppName}.xcodeproj' | sed 's: :\\ :g') dist/content.js

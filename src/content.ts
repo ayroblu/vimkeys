@@ -1,3 +1,7 @@
+import { insertText } from "./insert-text";
+import { modeHelper } from "./modeHelper";
+import { Keymap } from "./types";
+
 browser.runtime.sendMessage({ greeting: "hello" }).then((response) => {
   console.log("Received response: ", response);
 });
@@ -7,48 +11,6 @@ browser.runtime.onMessage.addListener(
     console.log("Received request: ", request);
   }
 );
-type Mode = "insert" | "normal";
-function modeHelper() {
-  let mode: Mode = "insert";
-  // There's two ways to think about state. Imagine 'party' and 'arts'. If you
-  // type in `parts` what should happen? Either simply clear / single ref
-  // state, aka nothing, or use a queue. Vim uses a queue, and will
-  // "replay" keys that didn't match
-  // In our design we didn't really want to have "overlaps" where you have "p"
-  // and "parts", but maybe we should given vim mapping dsl
-  // We can't "replay" events cause browser sandboxing, but for inuts
-  // specifically we can simply update the input values
-  // TODO: clear state based on (scroll, resize), click, focus change
-  let state: null | Keymap = null;
-  let insertState: string[] = [];
-  return {
-    get value() {
-      return mode;
-    },
-    set value(newMode: Mode) {
-      if (newMode === mode) return;
-      state = null;
-      insertState = [];
-      mode = newMode;
-    },
-    getState: () => state,
-    setState: (newState: Keymap | null) => {
-      state = newState;
-    },
-    clearInsertState: () => {
-      if (insertState.length) {
-        insertState = [];
-      }
-    },
-    get insertState() {
-      return insertState.join("");
-    },
-    addInsertState: (key: string) => {
-      insertState.push(key);
-      // `p`, `pa` -> {p: {a: () => {}, default: () => paste}}
-    },
-  };
-}
 const mode = modeHelper();
 
 addEventListener("keydown", handleKeyEvent, true);
@@ -80,40 +42,6 @@ function handleKeyEvent(event: KeyboardEvent) {
     mode.clearInsertState();
   }
 }
-function insertText(textField: HTMLElement, text: string): void {
-  if (
-    textField instanceof HTMLInputElement ||
-    textField instanceof HTMLTextAreaElement
-  ) {
-    if (textField.selectionStart || textField.selectionStart === 0) {
-      const startPos = textField.selectionStart;
-      const endPos = textField.selectionEnd;
-      textField.value =
-        textField.value.substring(0, startPos) +
-        text +
-        (endPos
-          ? textField.value.substring(endPos, textField.value.length)
-          : "");
-    } else {
-      textField.value += text;
-    }
-  } else {
-    insertTextAtCaretContentEditable(text);
-  }
-}
-// https://stackoverflow.com/questions/2920150/insert-text-at-cursor-in-a-content-editable-div
-function insertTextAtCaretContentEditable(text: string) {
-  if (window.getSelection) {
-    const sel = window.getSelection();
-    if (sel && sel.getRangeAt && sel.rangeCount) {
-      const range = sel.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(document.createTextNode(text));
-    }
-    // } else if (document.selection && document.selection.createRange) {
-    //     document.selection.createRange().text = text;
-  }
-}
 
 function getKey(event: KeyboardEvent) {
   return (
@@ -128,7 +56,6 @@ function getKey(event: KeyboardEvent) {
   );
 }
 // to handle p + pa, we need to add a "default" option
-type Keymap = { [key: string]: (() => void) | Keymap };
 const normalKeymaps: Keymap = {
   j: () => scrollBy(0, 50),
   k: () => scrollBy(0, -50),
