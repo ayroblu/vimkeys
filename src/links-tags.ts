@@ -3,6 +3,7 @@ import { Highlight } from "./types";
 
 let highlights: Highlight[] = [];
 let typedState = "";
+// https://gist.github.com/iiLaurens/81b1b47f6259485c93ce6f0cdd17490a
 export function showLinkTags() {
   const bodyRect = document.body.getBoundingClientRect();
 
@@ -16,7 +17,7 @@ export function showLinkTags() {
           !!el.onclick ||
           window.getComputedStyle(el).cursor == "pointer")
     )
-    .map(function(element) {
+    .map(function (element) {
       var rect = element.getBoundingClientRect();
       return {
         element: element,
@@ -35,7 +36,7 @@ export function showLinkTags() {
     .filter(
       (item) =>
         (item.rect.right - item.rect.left) *
-        (item.rect.bottom - item.rect.top) >=
+          (item.rect.bottom - item.rect.top) >=
         20
     );
 
@@ -151,7 +152,7 @@ function isElementInViewport(el: HTMLElement) {
     rect.top >= 0 &&
     rect.left >= 0 &&
     rect.bottom <=
-    (window.innerHeight || document.documentElement.clientHeight) &&
+      (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 }

@@ -105,10 +105,9 @@ const alpha = [
   ...Array.from(Array(10)).map((_, i) => i + 48),
   ...Array.from(Array(26)).map((_, i) => i + 65),
   ...Array.from(Array(26)).map((_, i) => i + 97),
-];
-alpha
-  .map((x) => String.fromCharCode(x))
-  .forEach((char) => (linksKeymaps[char] = handlers.handleLinkFn(char)));
+].map((x) => String.fromCharCode(x));
+alpha.push("Backspace");
+alpha.forEach((char) => (linksKeymaps[char] = handlers.handleLinkFn(char)));
 
 function getIsInsertInput(event: KeyboardEvent) {
   return mode.value === "insert" && getIsInputTarget(event);
