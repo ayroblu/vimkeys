@@ -70,6 +70,8 @@ const normalKeymaps: Keymap = {
   d: handlers.scrollDownHalfPage,
   u: handlers.scrollUpHalFPage,
   f: handlers.showLinkTags,
+  "M-(": handlers.moveTabLeft,
+  "M-)": handlers.moveTabRight,
   "'": handlers.insertMode,
 };
 const insertKeymaps: Keymap = {

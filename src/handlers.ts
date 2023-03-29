@@ -16,3 +16,14 @@ export const clearLinksAndNormal = () => {
   clearLinks();
   normalMode();
 };
+export const moveTabLeft = () =>
+  browser.tabs.getCurrent().then(({ id, index }) => {
+    if (!id) return;
+    browser.tabs.move(id, { index: index - 1 });
+  });
+
+export const moveTabRight = () =>
+  browser.tabs.getCurrent().then(({ id, index }) => {
+    if (!id) return;
+    browser.tabs.move(id, { index: index + 1 });
+  });

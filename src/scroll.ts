@@ -5,6 +5,10 @@ export function getScrollable(): Window | HTMLElement {
   if (lastTarget) {
     return lastTarget;
   }
+  if (document.body.clientHeight > window.innerHeight) {
+    lastTarget = window;
+    return lastTarget;
+  }
   const items = [...document.querySelectorAll("*")].filter(
     (el): el is HTMLElement =>
       el instanceof HTMLElement &&
@@ -30,10 +34,13 @@ export function getScrollable(): Window | HTMLElement {
   lastTarget = maxItem;
   return maxItem;
 }
-let lastTarget: null | HTMLElement = null;
-document.body.addEventListener(
+let lastTarget: null | HTMLElement | Window = null;
+addEventListener(
   "scroll",
   (event) => {
+    if (event.target === document) {
+      lastTarget = window;
+    }
     if (event.target instanceof HTMLElement) {
       lastTarget = event.target;
     }
