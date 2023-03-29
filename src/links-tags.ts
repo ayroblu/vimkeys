@@ -16,7 +16,7 @@ export function showLinkTags() {
           !!el.onclick ||
           window.getComputedStyle(el).cursor == "pointer")
     )
-    .map(function (element) {
+    .map(function(element) {
       var rect = element.getBoundingClientRect();
       return {
         element: element,
@@ -35,7 +35,7 @@ export function showLinkTags() {
     .filter(
       (item) =>
         (item.rect.right - item.rect.left) *
-          (item.rect.bottom - item.rect.top) >=
+        (item.rect.bottom - item.rect.top) >=
         20
     );
 
@@ -116,7 +116,8 @@ export function clearLinks() {
 // Also, can be omni bar style menu or tabbable
 export function handleLinkFn(char: string) {
   return () => {
-    const resultText = typedState + char;
+    const resultText =
+      char === "Backspace" ? typedState.slice(0, -1) : typedState + char;
     const eligibleHighlights = highlights.filter(
       ({ numLabel, setEligible }) => {
         const isEligible = numLabel.startsWith(resultText);
@@ -150,7 +151,7 @@ function isElementInViewport(el: HTMLElement) {
     rect.top >= 0 &&
     rect.left >= 0 &&
     rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
+    (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 }

@@ -2,3 +2,4 @@
 /node_modules
 /dist
 Shared (Extension)/Resources/content.js
+Shared (Extension)/Resources/background.js

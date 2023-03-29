@@ -20,3 +20,4 @@ Reference
 
 - https://www.bedelstein.com/post/building-a-safari-app-extension-in-ios-15
 - https://developer.apple.com/videos/play/wwdc2021/10104/
+- https://developer.apple.com/documentation/safariservices/safari_web_extensions/assessing_your_safari_web_extension_s_browser_compatibility

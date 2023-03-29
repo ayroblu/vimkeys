@@ -3,10 +3,13 @@ import { mode } from "./mode-helper";
 import { Keymap } from "./types";
 import * as handlers from "./handlers";
 import { log } from "./log";
+import { sendMessage } from "./messaging";
 
-browser.runtime.sendMessage({ greeting: "hello" }).then((response) => {
-  log("Received response: ", response);
-});
+sendMessage<"greeting">({ type: "greeting", greeting: "hello" }).then(
+  (response) => {
+    log("Received response: ", response.farewell);
+  }
+);
 
 browser.runtime.onMessage.addListener(
   (request: any, _sender: any, _sendResponse: any) => {
@@ -39,11 +42,18 @@ function handleKeyEvent(event: KeyboardEvent) {
       mode.setState(mapped);
     }
   } else if (keymap.other && typeof keymap.other === "function") {
+    log("other firing");
+    event.preventDefault();
     mode.setState(null);
     mode.clearInsertState();
     keymap.other();
   } else {
-    if (getIsInsertInput(event) && event.target instanceof HTMLElement) {
+    if (
+      getIsInsertInput(event) &&
+      event.target instanceof HTMLElement &&
+      mode.insertState
+    ) {
+      event.preventDefault();
       insertText(event.target, mode.insertState);
     }
     mode.setState(null);
@@ -57,7 +67,9 @@ function getKey(event: KeyboardEvent) {
       event.ctrlKey ? "C-" : null,
       event.metaKey ? "M-" : null,
       event.altKey ? "A-" : null,
-      event.shiftKey && event.key.toUpperCase() !== event.key ? "S-" : null,
+      event.shiftKey && (event.ctrlKey || event.metaKey || event.altKey)
+        ? "S-"
+        : null,
     ]
       .filter(Boolean)
       .join("") + event.key
@@ -68,10 +80,13 @@ const normalKeymaps: Keymap = {
   j: handlers.scrollDownABit,
   k: handlers.scrollUpABit,
   d: handlers.scrollDownHalfPage,
-  u: handlers.scrollUpHalFPage,
+  u: handlers.scrollUpHalfPage,
   f: handlers.showLinkTags,
-  "M-(": handlers.moveTabLeft,
-  "M-)": handlers.moveTabRight,
+  y: {
+    t: handlers.duplicateTab,
+  },
+  // "M-S-9": handlers.moveTabLeft,
+  // "M-S-0": handlers.moveTabRight,
   "'": handlers.insertMode,
 };
 const insertKeymaps: Keymap = {
@@ -104,6 +119,7 @@ function getKeymap(event: KeyboardEvent): Keymap {
       return normalKeymaps;
     case "insert":
       if (getIsInputTarget(event)) {
+        log("is insert");
         return insertInputKeymaps;
       } else {
         return insertKeymaps;
