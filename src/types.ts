@@ -23,8 +23,13 @@ type GreetingAction = BackgroundMessageAction<
   { type: "greeting"; greeting: string },
   { farewell: string }
 >;
+type NewTabNextToCurrentAction = BackgroundMessageAction<
+  { type: "newTabNextToCurrent" },
+  {}
+>;
 export type Actions = {
   duplicateTab: DuplicateAction;
+  newTabNextToCurrent: NewTabNextToCurrentAction;
   greeting: GreetingAction;
 };
 export type MessageListener<K extends keyof Actions> = (

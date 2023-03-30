@@ -3,7 +3,11 @@ import { Actions, MessageListener } from "./types";
 export function addMessageListener<K extends keyof Actions>(
   cb: MessageListener<K>
 ) {
-  browser.runtime.onMessage.addListener(cb as browser.runtime.onMessageEvent);
+  const callback = cb as browser.runtime.onMessageEvent;
+  browser.runtime.onMessage.addListener(callback);
+  return () => {
+    browser.runtime.onMessage.removeListener(callback);
+  };
 }
 export function sendMessage<K extends keyof Actions>(
   req: Actions[K]["request"]

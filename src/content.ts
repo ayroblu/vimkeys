@@ -3,7 +3,8 @@ import { mode } from "./mode-helper";
 import { Keymap } from "./types";
 import * as handlers from "./handlers";
 import { log } from "./log";
-import { sendMessage } from "./messaging";
+import { addMessageListener, sendMessage } from "./messaging";
+import { setupScrollListener } from "./scroll";
 
 sendMessage<"greeting">({ type: "greeting", greeting: "hello" }).then(
   (response) => {
@@ -11,18 +12,43 @@ sendMessage<"greeting">({ type: "greeting", greeting: "hello" }).then(
   }
 );
 
-browser.runtime.onMessage.addListener(
-  (request: any, _sender: any, _sendResponse: any) => {
+const disposeMessageListener = addMessageListener(
+  (request, _sender, _sendResponse) => {
     log("Received request: ", request);
   }
 );
 
 addEventListener("keydown", handleKeyEvent, true);
+const disposeKeydownListener = () => {
+  removeEventListener("keydown", handleKeyEvent, true);
+};
+
+const disposeScrollListener = setupScrollListener();
+
+// when rebuilding our extension, safari immediately remounts the script so we end up with two event listeners.
+// the background script however is fully unmounted, so the promise will always return undefined
+// List to focus events and unmount old scripts
+// Note: we can't simply add a listener to window
+function focusHandler() {
+  sendMessage({ type: "greeting", greeting: "hello" })
+    .then((response) => {
+      if (response) return;
+      disposeFocusHandler();
+      disposeMessageListener();
+      disposeKeydownListener();
+      disposeScrollListener();
+    })
+    .catch((err) => console.error("err", err));
+}
+window.addEventListener("focus", focusHandler);
+function disposeFocusHandler() {
+  window.removeEventListener("focus", focusHandler);
+}
 
 function handleKeyEvent(event: KeyboardEvent) {
   const key = getKey(event);
   const keymap = getKeymap(event);
-  log("key", key);
+  log("key", key, "state", mode.getState(), keymap);
   const mapped = (mode.getState() ?? keymap)[key];
   // I don't think this handles modifier presses well
   if (mapped) {
@@ -77,11 +103,20 @@ function getKey(event: KeyboardEvent) {
 }
 // to handle p + pa, we need to add a "default" option
 const normalKeymaps: Keymap = {
+  " ": {
+    t: handlers.newTabNextToCurrent,
+  },
   j: handlers.scrollDownABit,
   k: handlers.scrollUpABit,
+  h: handlers.scrollLeftABit,
+  l: handlers.scrollRightABit,
   d: handlers.scrollDownHalfPage,
   u: handlers.scrollUpHalfPage,
   f: handlers.showLinkTags,
+  g: {
+    g: handlers.scrollToTop,
+  },
+  G: handlers.scrollToBottom,
   y: {
     t: handlers.duplicateTab,
   },
@@ -91,6 +126,10 @@ const normalKeymaps: Keymap = {
 };
 const insertKeymaps: Keymap = {
   '"': handlers.normalMode,
+  " ": {
+    t: handlers.newTabNextToCurrent,
+    " ": handlers.normalMode,
+  },
 };
 const insertInputKeymaps: Keymap = {
   'C-"': handlers.normalMode,

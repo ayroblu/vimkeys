@@ -1,16 +1,18 @@
 import { mode } from "./mode-helper";
 import { clearLinks } from "./links-tags";
-import { getScrollable } from "./scroll";
+import { getScrollable, handleScrollToBottom, scrollHalfPage } from "./scroll";
 import { sendMessage } from "./messaging";
 
 export { showLinkTags, handleLinkFn } from "./links-tags";
 
 export const scrollDownABit = () => getScrollable().scrollBy(0, 50);
 export const scrollUpABit = () => getScrollable().scrollBy(0, -50);
-export const scrollDownHalfPage = () =>
-  getScrollable().scrollBy(0, window.innerHeight / 2);
-export const scrollUpHalfPage = () =>
-  getScrollable().scrollBy(0, -window.innerHeight / 2);
+export const scrollLeftABit = () => getScrollable().scrollBy(-50, 0);
+export const scrollRightABit = () => getScrollable().scrollBy(50, 0);
+export const scrollDownHalfPage = () => scrollHalfPage("down");
+export const scrollUpHalfPage = () => scrollHalfPage("up");
+export const scrollToTop = () => getScrollable().scrollTo(0, 0);
+export const scrollToBottom = () => handleScrollToBottom();
 export const insertMode = () => (mode.value = "insert");
 export const normalMode = () => (mode.value = "normal");
 export const clearLinksAndNormal = () => {
@@ -19,6 +21,8 @@ export const clearLinksAndNormal = () => {
 };
 export const duplicateTab = () =>
   sendMessage<"duplicateTab">({ type: "duplicateTab" });
+export const newTabNextToCurrent = () =>
+  sendMessage<"newTabNextToCurrent">({ type: "newTabNextToCurrent" });
 
 // Not supported in safari: https://developer.apple.com/documentation/safariservices/safari_web_extensions/assessing_your_safari_web_extension_s_browser_compatibility
 // export const moveTabLeft = () =>
