@@ -12,6 +12,7 @@ export function showLinkTags() {
       (el): el is HTMLElement =>
         el instanceof HTMLElement &&
         isElementInViewport(el) &&
+        !isHidden(el) &&
         (el.tagName === "BUTTON" ||
           el.tagName === "A" ||
           !!el.onclick ||
@@ -154,5 +155,13 @@ function isElementInViewport(el: HTMLElement) {
     rect.bottom <=
       (window.innerHeight || document.documentElement.clientHeight) &&
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+function isHidden(el: HTMLElement) {
+  const style = window.getComputedStyle(el);
+  return (
+    style.display === "none" ||
+    style.visibility === "hidden" ||
+    style.pointerEvents === "none"
   );
 }

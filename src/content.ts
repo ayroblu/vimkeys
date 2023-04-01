@@ -105,6 +105,7 @@ function getKey(event: KeyboardEvent) {
 const normalKeymaps: Keymap = {
   " ": {
     t: handlers.newTabNextToCurrent,
+    Tab: handlers.tabsSearch,
   },
   j: handlers.scrollDownABit,
   k: handlers.scrollUpABit,
@@ -129,6 +130,7 @@ const insertKeymaps: Keymap = {
   " ": {
     t: handlers.newTabNextToCurrent,
     " ": handlers.normalMode,
+    Tab: handlers.tabsSearch,
   },
 };
 const insertInputKeymaps: Keymap = {
@@ -139,6 +141,9 @@ const insertInputKeymaps: Keymap = {
 };
 const linksKeymaps: Keymap = {
   other: handlers.clearLinksAndNormal,
+};
+const searchKeymaps: Keymap = {
+  Escape: handlers.hideSearchBar,
 };
 const alpha = [
   ...Array.from(Array(10)).map((_, i) => i + 48),
@@ -164,6 +169,8 @@ function getKeymap(event: KeyboardEvent): Keymap {
       }
     case "links":
       return linksKeymaps;
+    case "search":
+      return searchKeymaps;
     default:
       const exhaustiveCheck: never = mode.value;
       throw new Error(`Unhandled getKeymap case: ${exhaustiveCheck}`);

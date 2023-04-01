@@ -1,4 +1,4 @@
-import { Actions, MessageListener } from "./types";
+import { Actions, MessageListener } from "./background";
 
 export function addMessageListener<K extends keyof Actions>(
   cb: MessageListener<K>
@@ -10,7 +10,7 @@ export function addMessageListener<K extends keyof Actions>(
   };
 }
 export function sendMessage<K extends keyof Actions>(
-  req: Actions[K]["request"]
-): Promise<Actions[K]["response"]> {
+  req: Parameters<Actions[K]>[0]
+): Promise<Parameters<Parameters<Actions[K]>[2]>[0]> {
   return browser.runtime.sendMessage(req);
 }

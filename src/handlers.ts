@@ -2,8 +2,10 @@ import { mode } from "./mode-helper";
 import { clearLinks } from "./links-tags";
 import { getScrollable, handleScrollToBottom, scrollHalfPage } from "./scroll";
 import { sendMessage } from "./messaging";
+import { searchTabs } from "./search-bar";
 
 export { showLinkTags, handleLinkFn } from "./links-tags";
+export { hideSearchBar } from "./search-bar";
 
 export const scrollDownABit = () => getScrollable().scrollBy(0, 50);
 export const scrollUpABit = () => getScrollable().scrollBy(0, -50);
@@ -23,8 +25,10 @@ export const duplicateTab = () =>
   sendMessage<"duplicateTab">({ type: "duplicateTab" });
 export const newTabNextToCurrent = () =>
   sendMessage<"newTabNextToCurrent">({ type: "newTabNextToCurrent" });
+export const tabsSearch = () => searchTabs("");
 
 // Not supported in safari: https://developer.apple.com/documentation/safariservices/safari_web_extensions/assessing_your_safari_web_extension_s_browser_compatibility
+// export const bookmarksSearch = () => searchBookmarks("");
 // export const moveTabLeft = () =>
 //   getCurrentTab().then((tab) => {
 //     if (!tab || !tab.id) return;
