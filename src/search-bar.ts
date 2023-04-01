@@ -79,25 +79,34 @@ class SearchBar extends CustomElement {
 
     shadow.innerHTML = `
 <style>
+h3, p {
+  margin: 0;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .search-bar {
   width: 80vw;
   max-height: 60vh;
-  overflow: auto;
   background-color: black;
   color: white;
   position: fixed;
   top: 20vh;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 2147483647;
   border: 1px solid #888;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
 }
 .input {
   width: 100%;
-  font-size: 20px;
+  font-size: 24px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 4px 8px;
+  box-sizing: border-box;
 }
 .item {
   border-bottom: 1px solid #888;
@@ -105,6 +114,9 @@ class SearchBar extends CustomElement {
 }
 .selected {
   background-color: #58c;
+}
+.list {
+  overflow: auto;
 }
 </style>
 <div class="search-bar">
@@ -169,7 +181,7 @@ class SearchBar extends CustomElement {
     input!.value = "";
     const list = this.list;
     list!.innerHTML = "";
-    container.style.display = "block";
+    container.style.display = "flex";
     if (!this.input) return;
     this.input.oninput = this.handleSearch;
     this.input.onkeydown = this.handleKeydown;
@@ -182,7 +194,14 @@ class SearchBar extends CustomElement {
     const itemsWithEl = items.map((item) => {
       const el: HTMLElement = document.createElement("div");
       el.classList.add("item");
-      el.innerText = item.title;
+      const titleEl = document.createElement("h3");
+      titleEl.innerText = item.title;
+      el.appendChild(titleEl);
+      if (item.subtitle) {
+        const subtitleEl = document.createElement("p");
+        subtitleEl.innerText = item.subtitle;
+        el.appendChild(subtitleEl);
+      }
       list.appendChild(el);
       return {
         ...item,
