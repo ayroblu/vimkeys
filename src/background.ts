@@ -47,6 +47,13 @@ const actions = {
     );
     return filteredTabs;
   },
+  focusTab: async (
+    request: { type: "focusTab"; id: number },
+    _sender: browser.runtime.MessageSender,
+    _sendResponse: (tabs: browser.tabs.Tab[]) => void
+  ) => {
+    await browser.tabs.update(request.id, { active: true });
+  },
   // searchBookmarks: async (
   //   request: { type: "searchBookmarks"; query: string },
   //   _sender: browser.runtime.MessageSender,

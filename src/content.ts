@@ -4,6 +4,7 @@ import { log } from "./log";
 import { addMessageListener, sendMessage } from "./messaging";
 import { setupScrollListener } from "./scroll";
 import { getIsInputTarget, getKeymap } from "./keymaps";
+import { getKey } from "./utils";
 
 sendMessage<"greeting">({ type: "greeting", greeting: "hello" }).then(
   (response) => {
@@ -84,21 +85,6 @@ function handleKeyEvent(event: KeyboardEvent) {
     mode.setState(null);
     mode.clearInsertState();
   }
-}
-
-function getKey(event: KeyboardEvent) {
-  return (
-    [
-      event.ctrlKey ? "C-" : null,
-      event.metaKey ? "M-" : null,
-      event.altKey ? "A-" : null,
-      event.shiftKey && (event.ctrlKey || event.metaKey || event.altKey)
-        ? "S-"
-        : null,
-    ]
-      .filter(Boolean)
-      .join("") + event.key
-  );
 }
 
 function getIsInsertInput(event: KeyboardEvent) {
