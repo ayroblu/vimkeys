@@ -3,6 +3,16 @@ vimkeys
 
 This is a safari extension in the spirit of vimium-c
 
+Getting started
+---------------
+
+```sh
+make
+# first install
+make build
+```
+
+
 TODO
 ----
 

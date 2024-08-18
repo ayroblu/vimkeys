@@ -38,7 +38,7 @@ function focusHandler() {
       disposeKeydownListener();
       disposeScrollListener();
     })
-    .catch((err) => console.error("err", err));
+    .catch((err) => log("err", err));
 }
 window.addEventListener("focus", focusHandler);
 function disposeFocusHandler() {

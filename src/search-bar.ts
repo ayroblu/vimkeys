@@ -1,3 +1,4 @@
+import { log } from "./log.js";
 import { sendMessage } from "./messaging";
 import { mode } from "./mode-helper";
 import { collect, getKey } from "./utils";
@@ -48,7 +49,7 @@ class CustomElement extends HTMLElement {
       throw new Error("Abstract class CustomElement name must be changed.");
     }
     if (customElements.get(name)) {
-      console.log(name, "already defined");
+      log(name, "already defined");
       return;
     }
     customElements.define(name, this);

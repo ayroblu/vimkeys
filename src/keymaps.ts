@@ -27,6 +27,12 @@ const normalKeymaps: Keymap = {
   // "M-S-0": handlers.moveTabRight,
   "'": handlers.insertMode,
 };
+const normalInputKeymaps: Keymap = {
+  "C-'": handlers.insertMode,
+  // j: {
+  //   k: handlers.normalMode,
+  // },
+};
 const insertKeymaps: Keymap = {
   '"': handlers.normalMode,
   " ": {
@@ -37,9 +43,9 @@ const insertKeymaps: Keymap = {
 };
 const insertInputKeymaps: Keymap = {
   'C-"': handlers.normalMode,
-  j: {
-    k: handlers.normalMode,
-  },
+  // j: {
+  //   k: handlers.normalMode,
+  // },
 };
 const linksKeymaps: Keymap = {
   other: handlers.clearLinksAndNormal,
@@ -58,7 +64,11 @@ alpha.forEach((char) => (linksKeymaps[char] = handlers.handleLinkFn(char)));
 export function getKeymap(event: KeyboardEvent): Keymap {
   switch (mode.value) {
     case "normal":
-      return normalKeymaps;
+      if (getIsInputTarget(event)) {
+        return normalInputKeymaps;
+      } else {
+        return normalKeymaps;
+      }
     case "insert":
       if (getIsInputTarget(event)) {
         log("is insert");
