@@ -36,5 +36,5 @@ Shared\ (Extension)/Resources/background.js: $(shell rg --files src)
 > npx esbuild ./src/background.js --bundle --outfile="$@"
 
 DerivedData/${AppName}/Build/Products/${Configuration}/${AppName}.sentinel: $(shell rg --files 'Shared (App)' 'Shared (Extension)' 'iOS (App)' 'iOS (Extension)' 'macOS (App)' 'macOS (Extension)' '${AppName}.xcodeproj' | sed 's: :\\ :g') dist/content.js
-> xcodebuild -scheme ${AppTargetName} -target ${AppTargetName} -configuration ${Configuration} -destination arch=arm64 build
+> xcodebuild -scheme ${AppTargetName} -target ${AppTargetName} -configuration ${Configuration} -destination 'arch=arm64,platform=macOS' build
 > touch "$@"
