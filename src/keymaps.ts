@@ -35,11 +35,11 @@ const normalInputKeymaps: Keymap = {
 };
 const insertKeymaps: Keymap = {
   '"': handlers.normalMode,
-  " ": {
-    t: handlers.newTabNextToCurrent,
-    " ": handlers.normalMode,
-    Tab: handlers.tabsSearch,
-  },
+  // " ": {
+  //   t: handlers.newTabNextToCurrent,
+  //   " ": handlers.normalMode,
+  //   Tab: handlers.tabsSearch,
+  // },
 };
 const insertInputKeymaps: Keymap = {
   'C-"': handlers.normalMode,
@@ -87,10 +87,5 @@ export function getKeymap(event: KeyboardEvent): Keymap {
 }
 
 export function getIsInputTarget(event: KeyboardEvent) {
-  return (
-    event.target instanceof HTMLElement &&
-    (event.target.nodeName == "INPUT" ||
-      event.target.nodeName == "TEXTAREA" ||
-      event.target.isContentEditable)
-  );
+  return event.target !== document.body
 }
