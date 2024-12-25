@@ -78,8 +78,10 @@ export function getKeymap(event: KeyboardEvent): Keymap {
     case "insert":
       if (getIsInputTarget(event)) {
         log("is insert");
+        console.log("input insert", event.target);
         return insertInputKeymaps;
       } else {
+        console.log("normal insert");
         return insertKeymaps;
       }
     case "links":
@@ -99,7 +101,10 @@ export function getIsInputTarget(event: KeyboardEvent) {
       if (!(target instanceof HTMLElement)) {
         return false;
       }
-      if (["A", "BUTTON"].includes(target.tagName)) {
+      if (["INPUT"].includes(target.tagName)) {
+        return true;
+      }
+      if (["A", "BUTTON", "DIV"].includes(target.tagName)) {
         return false;
       }
       if (target.tabIndex >= 0) {

@@ -8,7 +8,7 @@ import { getKey } from "./utils";
 
 sendMessage<"greeting">({ type: "greeting", greeting: "hello" }).then(
   (response) => {
-    log("Received response: ", response.farewell);
+    log("Received response: ", response?.farewell);
   }
 );
 
