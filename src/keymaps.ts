@@ -18,6 +18,7 @@ const normalKeymaps: Keymap = {
   f: handlers.showLinkTags,
   g: {
     g: handlers.scrollToTop,
+    i: handlers.goToNextInput,
   },
   G: handlers.scrollToBottom,
   y: {
@@ -26,15 +27,20 @@ const normalKeymaps: Keymap = {
   // "M-S-9": handlers.moveTabLeft,
   // "M-S-0": handlers.moveTabRight,
   "'": handlers.insertMode,
+  Escape: handlers.handleResetScrollable,
 };
 const normalInputKeymaps: Keymap = {
   "C-'": handlers.insertMode,
+  "C-d": handlers.scrollDownHalfPage,
+  "C-u": handlers.scrollUpHalfPage,
   // j: {
   //   k: handlers.normalMode,
   // },
 };
 const insertKeymaps: Keymap = {
   '"': handlers.normalMode,
+  "C-d": handlers.scrollDownHalfPage,
+  "C-u": handlers.scrollUpHalfPage,
   // " ": {
   //   t: handlers.newTabNextToCurrent,
   //   " ": handlers.normalMode,
@@ -87,5 +93,19 @@ export function getKeymap(event: KeyboardEvent): Keymap {
 }
 
 export function getIsInputTarget(event: KeyboardEvent) {
-  return event.target !== document.body
+  return (
+    event.target !== document.body &&
+    ((target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) {
+        return false;
+      }
+      if (["A", "BUTTON"].includes(target.tagName)) {
+        return false;
+      }
+      if (target.tabIndex >= 0) {
+        return false;
+      }
+      return true;
+    })(event.target)
+  );
 }

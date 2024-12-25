@@ -1,6 +1,11 @@
 import { mode } from "./mode-helper";
-import { clearLinks } from "./links-tags";
-import { getScrollable, handleScrollToBottom, scrollHalfPage } from "./scroll";
+import { clearLinks, nextInput } from "./links-tags";
+import {
+  getScrollable,
+  handleScrollToBottom,
+  resetScrollable,
+  scrollHalfPage,
+} from "./scroll";
 import { sendMessage } from "./messaging";
 import { showSearchTabs } from "./search-bar";
 
@@ -15,6 +20,8 @@ export const scrollDownHalfPage = () => scrollHalfPage("down");
 export const scrollUpHalfPage = () => scrollHalfPage("up");
 export const scrollToTop = () => getScrollable().scrollTo(0, 0);
 export const scrollToBottom = () => handleScrollToBottom();
+export const handleResetScrollable = () => resetScrollable();
+export const goToNextInput = () => nextInput();
 export const insertMode = () => (mode.value = "insert");
 export const normalMode = () => (mode.value = "normal");
 export const clearLinksAndNormal = () => {

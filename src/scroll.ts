@@ -79,3 +79,6 @@ export function setupScrollListener() {
     removeEventListener("scroll", eventListener, { capture: true });
   };
 }
+export function resetScrollable() {
+  lastTarget = window;
+}

@@ -165,3 +165,24 @@ function isHidden(el: HTMLElement) {
     style.pointerEvents === "none"
   );
 }
+export function nextInput() {
+  const inputs = [...document.querySelectorAll("input")].filter(
+    (element) =>
+      isElementInViewport(element) &&
+      !isHidden(element) &&
+      ["text"].includes(element.type) &&
+      !element.disabled
+  );
+  if (!inputs.length) {
+    return;
+  }
+  const activeElement = document.activeElement;
+  let nextIndex = 0;
+  if (activeElement instanceof HTMLInputElement) {
+    const index = inputs.indexOf(activeElement);
+    if (index !== -1) {
+      nextIndex = index + (1 % inputs.length);
+    }
+  }
+  inputs[nextIndex].focus();
+}
