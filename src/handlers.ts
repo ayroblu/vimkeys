@@ -8,6 +8,7 @@ import {
 } from "./scroll";
 import { sendMessage } from "./messaging";
 import { showSearchTabs } from "./search-bar";
+import { notif } from "./notif.js";
 
 export { showLinkTags, handleLinkFn } from "./links-tags";
 export { hideSearchBar } from "./search-bar";
@@ -22,8 +23,14 @@ export const scrollToTop = () => getScrollable().scrollTo(0, 0);
 export const scrollToBottom = () => handleScrollToBottom();
 export const handleResetScrollable = () => resetScrollable();
 export const goToNextInput = () => nextInput();
-export const insertMode = () => (mode.value = "insert");
-export const normalMode = () => (mode.value = "normal");
+export const insertMode = () => {
+  notif("INSERT");
+  mode.value = "insert";
+};
+export const normalMode = () => {
+  notif("NORMAL");
+  mode.value = "normal";
+};
 export const clearLinksAndNormal = () => {
   clearLinks();
   normalMode();
