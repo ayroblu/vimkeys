@@ -109,6 +109,8 @@ export function showLinkTags() {
 export function clearLinks() {
   highlights.forEach(({ el }) => el.remove());
   highlights = [];
+  mode.value = "normal";
+  typedState = "";
 }
 // How to handle links, there's a few different ways
 // 1. sequential, e.g. a, b, aa, ab etc
@@ -129,7 +131,6 @@ export function handleLinkFn(char: string) {
     );
     if (eligibleHighlights.length === 0) {
       clearLinks();
-      mode.value = "normal";
     } else if (eligibleHighlights.length === 1) {
       // eligibleHighlights[0].originalEl.click();
       const clickEvent = new MouseEvent("click", {
@@ -139,7 +140,6 @@ export function handleLinkFn(char: string) {
       });
       eligibleHighlights[0].originalEl.dispatchEvent(clickEvent);
       clearLinks();
-      mode.value = "normal";
     } else {
       typedState = resultText;
     }
@@ -166,15 +166,14 @@ function isHidden(el: HTMLElement) {
   );
 }
 export function nextInput() {
-  const inputs = [...document.querySelectorAll("input")].filter(
-    (element) =>
-      isElementInViewport(element) &&
-      !isHidden(element) &&
-      ["text"].includes(element.type) &&
-      !element.disabled
-  );
+  let inputs = [
+    ...document.querySelectorAll("input[type=text],textarea"),
+  ].filter(filterInputs);
   if (!inputs.length) {
-    return;
+    inputs = getAllInputsIncludingWebComponents();
+    if (!inputs.length) {
+      return;
+    }
   }
   const activeElement = document.activeElement;
   let nextIndex = 0;
@@ -185,4 +184,30 @@ export function nextInput() {
     }
   }
   inputs[nextIndex].focus();
+}
+function getAllInputsIncludingWebComponents(
+  root: Document | ShadowRoot = document
+): (HTMLInputElement | HTMLTextAreaElement)[] {
+  const inputs = [];
+
+  inputs.push(...root.querySelectorAll("input[type=text],textarea"));
+
+  root.querySelectorAll("*").forEach((element) => {
+    if (element.shadowRoot) {
+      inputs.push(...getAllInputsIncludingWebComponents(element.shadowRoot));
+    }
+  });
+
+  return inputs.filter(filterInputs);
+}
+function filterInputs(
+  element: Element
+): element is HTMLInputElement | HTMLTextAreaElement {
+  return (
+    (element instanceof HTMLInputElement ||
+      element instanceof HTMLTextAreaElement) &&
+    isElementInViewport(element) &&
+    !isHidden(element) &&
+    !element.disabled
+  );
 }

@@ -1,5 +1,5 @@
 import { mode } from "./mode-helper";
-import { clearLinks, nextInput } from "./links-tags";
+import { nextInput } from "./links-tags";
 import {
   getScrollable,
   handleScrollToBottom,
@@ -10,7 +10,7 @@ import { sendMessage } from "./messaging";
 import { showSearchTabs } from "./search-bar";
 import { notif } from "./notif.js";
 
-export { showLinkTags, handleLinkFn } from "./links-tags";
+export { clearLinks, showLinkTags, handleLinkFn } from "./links-tags";
 export { hideSearchBar } from "./search-bar";
 
 export const scrollDownABit = () => getScrollable().scrollBy(0, 50);
@@ -30,10 +30,6 @@ export const insertMode = () => {
 export const normalMode = () => {
   notif("NORMAL");
   mode.value = "normal";
-};
-export const clearLinksAndNormal = () => {
-  clearLinks();
-  normalMode();
 };
 export const duplicateTab = () =>
   sendMessage<"duplicateTab">({ type: "duplicateTab" });

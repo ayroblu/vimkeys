@@ -2,7 +2,7 @@ import { Keymap, Mode } from "./types";
 
 export const mode = modeHelper();
 function modeHelper() {
-  let mode: Mode = "insert";
+  let mode: Mode = "normal";
   // There's two ways to think about state. Imagine 'party' and 'arts'. If you
   // type in `parts` what should happen? Either simply clear / single ref
   // state, aka nothing, or use a queue. Vim uses a queue, and will

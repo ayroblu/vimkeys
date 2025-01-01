@@ -54,7 +54,7 @@ const insertInputKeymaps: Keymap = {
   // },
 };
 const linksKeymaps: Keymap = {
-  other: handlers.clearLinksAndNormal,
+  other: handlers.clearLinks,
 };
 const searchKeymaps: Keymap = {
   Escape: handlers.hideSearchBar,
@@ -103,16 +103,19 @@ export function getIsInputTarget(event: KeyboardEvent) {
       if (["INPUT", "TEXTAREA"].includes(target.tagName)) {
         return true;
       }
-      if (["A", "BUTTON", "DIV"].includes(target.tagName)) {
-        return false;
+      if (target.getAttribute("contenteditable")) {
+        return true;
       }
-      if (target.tabIndex === -1) {
-        return false;
-      }
-      if (target.tabIndex >= 0) {
-        return false;
-      }
-      return true;
-    })(event.target)
+      // if (["A", "BUTTON", "DIV"].includes(target.tagName)) {
+      //   return false;
+      // }
+      // if (target.tabIndex === -1) {
+      //   return false;
+      // }
+      // if (target.tabIndex >= 0) {
+      //   return false;
+      // }
+      return false;
+    })(event.composedPath()[0])
   );
 }

@@ -12,6 +12,7 @@ function createNotif(text: string) {
     zIndex: 9999,
     border: "1px solid #ffffff",
     borderBottom: "0px solid #ffffff",
+    fontFamily: "monospace",
   });
   document.body.appendChild(element);
   return element;
